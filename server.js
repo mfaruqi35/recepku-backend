@@ -3,6 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
+import userRouter from "./routes/usersRoute";
 
 configDotenv();
 
@@ -17,5 +18,7 @@ db.once("open", () => console.log("Connected to MongoDB"));
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use("/users", userRouter);
 
 app.listen(PORT, () => console.log(`Server started in port: ${PORT}`));
