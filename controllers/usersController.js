@@ -1,6 +1,7 @@
 import usersModel from "../models/usersModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { verifyToken } from "../middleware/auth.js";
 
 const generateUserToken = (userId) => {
   try {
@@ -22,8 +23,8 @@ const generateUserToken = (userId) => {
 
 export const registerUser = async (req, res) => {
   try {
-    const { userName, email, password } = req.body;
-    if ((!userName, !email, !password)) {
+    const { fullName, email, password, phoneNumber } = req.body;
+    if ((!fullName, !email, !password, !phoneNumber)) {
       res.status(400).json({ message: "Please fill all required fields" });
     }
 
@@ -36,9 +37,10 @@ export const registerUser = async (req, res) => {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       const newUser = new usersModel({
-        userName,
+        fullName,
         email,
         password: hashedPassword,
+        phoneNumber,
       });
 
       await newUser.save();
@@ -71,15 +73,29 @@ export const loginUser = async (req, res) => {
 
       const token = generateUserToken(usersModel._id);
 
-      return res
-        .status(200)
-        .json({
-          message: "Login Successful",
-          token: token,
-          user: { id: user._id, name: user.userName, email: user.email },
-        });
+      return res.status(200).json({
+        message: "Login Successful",
+        token: token,
+        user: { id: user._id, name: user.fullName, email: user.email },
+      });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getProfile = [
+  verifyToken,
+  async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const userData = await usersModel.findById(userId);
+      if (userData == null) {
+        return res.status(404).json({ message: "Cannot find user" });
+      }
+      return res.status(200).json(userData);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+];
