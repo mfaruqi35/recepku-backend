@@ -23,8 +23,8 @@ const generateUserToken = (userId) => {
 
 export const registerUser = async (req, res) => {
   try {
-    const { fullName, email, password, phoneNumber } = req.body;
-    if ((!fullName, !email, !password, !phoneNumber)) {
+    const { firstName, lastName, email, password, phoneNumber } = req.body;
+    if (!firstName || !lastName || !email || !password || !phoneNumber) {
       res.status(400).json({ message: "Please fill all required fields" });
     }
 
@@ -37,7 +37,8 @@ export const registerUser = async (req, res) => {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       const newUser = new usersModel({
-        fullName,
+        firstName,
+        lastName,
         email,
         password: hashedPassword,
         phoneNumber,
