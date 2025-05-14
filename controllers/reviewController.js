@@ -34,3 +34,23 @@ export const createReview = [
     }
   },
 ];
+
+export const getAllReview = async (req, res) => {
+  try {
+    const reviews = await reviewsModel
+      .find()
+      .populate("User", "firstName lastName profilePic");
+
+    const reviewData = reviews.map((r) => ({
+      firstName: r.User?.firstName,
+      lastName: r.User?.lastName,
+      profilePic: r.User?.profilePic,
+      content: r.content,
+      rating: r.rating,
+    }));
+
+    return res.status(200).json({ reviews: reviewData });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
