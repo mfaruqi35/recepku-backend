@@ -30,6 +30,7 @@ const recipeSchema = new Schema({
   category: {
     type: String,
     enum: ["Appetizer", "Main Course", "Dessert", "Snack", "Beverage"],
+    required: true,
   },
 
   thumbnail: {

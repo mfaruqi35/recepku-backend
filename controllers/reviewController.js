@@ -8,6 +8,12 @@ export const createReview = [
       const userId = req.user._id;
       const { content, rating } = req.body;
 
+      // if (!userId) {
+      //   return res
+      //     .status(400)
+      //     .json({ message: "User id not found", status: 400, data: null });
+      // }
+
       if (!content || !rating) {
         return res
           .status(400)
@@ -26,9 +32,11 @@ export const createReview = [
 
       await review.save();
 
-      return res
-        .status(201)
-        .json({ message: "New review is successfully created", data: review });
+      return res.status(201).json({
+        message: "New review is successfully created",
+        status: 201,
+        data: review,
+      });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

@@ -30,9 +30,11 @@ export const registerUser = async (req, res) => {
 
     const isAlreadyRegister = await usersModel.findOne({ email });
     if (isAlreadyRegister) {
-      res
-        .status(400)
-        .json({ message: "User with this email is already registered" });
+      res.status(400).json({
+        message: "User with this email is already registered",
+        status: 400,
+        data: null,
+      });
     } else {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -48,7 +50,8 @@ export const registerUser = async (req, res) => {
 
       return res.status(201).json({
         message: "Successfully Registerd",
-        newUser,
+        status: 201,
+        data: newUser,
       });
     }
   } catch (error) {

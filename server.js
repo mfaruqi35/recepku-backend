@@ -5,6 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import userRouter from "./routes/usersRoute.js";
 import reviewRouter from "./routes/reviewsRoute.js";
+import commentRouter from "./routes/commentsRoute.js";
 
 configDotenv();
 
@@ -22,5 +23,6 @@ app.use(bodyParser.json());
 
 app.use("/users", userRouter);
 app.use("/reviews", reviewRouter);
+app.use("/comments", commentRouter);
 
 app.listen(PORT, () => console.log(`Server started in port: ${PORT}`));

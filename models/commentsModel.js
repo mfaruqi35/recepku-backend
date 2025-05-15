@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
 
-const commentSchema = new Schema({
+const commentSchema = new mongoose.Schema({
   recipeId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Recipe",
   },
-  userId: {
+  User: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  Rating: {
+  rating: {
     type: Number,
     min: 1,
     max: 5,
@@ -18,13 +18,13 @@ const commentSchema = new Schema({
     type: String,
     required: true,
   },
-  craetedAt: {
+  createdAt: {
     type: Date,
     default: Date.now(),
   },
   replies: [
     {
-      user: {
+      User: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
