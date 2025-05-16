@@ -8,12 +8,6 @@ export const createReview = [
       const userId = req.user._id;
       const { content, rating } = req.body;
 
-      // if (!userId) {
-      //   return res
-      //     .status(400)
-      //     .json({ message: "User id not found", status: 400, data: null });
-      // }
-
       if (!content || !rating) {
         return res
           .status(400)

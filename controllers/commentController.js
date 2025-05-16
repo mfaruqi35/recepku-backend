@@ -9,12 +9,6 @@ export const createComment = [
       const userId = req.user._id;
       const { commentText, rating } = req.body;
 
-      //   if (!userId) {
-      //     return res
-      //       .status(400)
-      //       .json({ message: "User id not found", status: 400, data: null });
-      //   }
-
       if (!commentText || !rating) {
         return res.status(400).json({
           message: "Please fill all required fields",

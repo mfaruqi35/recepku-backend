@@ -5,23 +5,28 @@ const recipeSchema = new Schema({
     type: String,
     required: true,
   },
+
   shortDescription: {
     type: String,
   },
 
   ingredients: [
     {
-      quantity: String,
-      description: String,
-      notes: String,
+      quantity: {
+        type: String,
+        required: true,
+      },
+      description: {
+        type: String,
+        required: true,
+      },
     },
   ],
-  instructions: [
-    {
-      step: Number,
-      description: String,
-    },
-  ],
+
+  instructions: {
+    type: String,
+    required: true,
+  },
 
   additionalInfo: {
     type: String,
@@ -29,7 +34,13 @@ const recipeSchema = new Schema({
 
   category: {
     type: String,
-    enum: ["Appetizer", "Main Course", "Dessert", "Snack", "Beverage"],
+    enum: [
+      "Makanan Pembuka",
+      "Makanan Utama",
+      "Makanan Penutup",
+      "Camilan",
+      "Minuman",
+    ],
     required: true,
   },
 
@@ -37,6 +48,7 @@ const recipeSchema = new Schema({
     type: String,
     required: true,
   },
+
   rating: {
     type: Number,
     min: 1,
@@ -46,6 +58,23 @@ const recipeSchema = new Schema({
   userId: {
     type: Schema.Type.ObjectId,
     required: true,
+  },
+
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+
+  likeCount: {
+    type: Number,
+    default: 0,
+  },
+
+  shareCount: {
+    type: Number,
+    default: 0,
   },
 
   createdAt: {

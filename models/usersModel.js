@@ -28,7 +28,6 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
 
-  likedRecipes: { type: mongoose.Schema.Types.ObjectId, ref: "Recipe" },
   savedRecipes: { type: mongoose.Schema.Types.ObjectId, ref: "Recipe" },
 
   createdAt: {
