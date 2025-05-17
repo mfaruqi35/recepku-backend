@@ -13,7 +13,7 @@ export const createComment = [
           data: null,
         });
       }
-      const userId = req.user._id;
+      const userId = req.user.userId;
       const { commentText, rating } = req.body;
       const file = req.files?.["image"]?.[0];
 
@@ -83,7 +83,7 @@ export const replyToComment = [
     try {
       const { commentId } = req.params;
       const { commentText } = req.body;
-      const userId = req.user._id;
+      const userId = req.user.userId;
 
       if (!commentText) {
         return res

@@ -5,7 +5,14 @@ export const createReview = [
   verifyToken,
   async (req, res) => {
     try {
-      const userId = req.user._id;
+      if (!req.user || !req.user.userId) {
+        return res.status(401).json({
+          message: "User authentication failed or invalid user data",
+          status: 401,
+          data: null,
+        });
+      }
+      const userId = req.user.userId;
       const { content, rating } = req.body;
 
       if (!content || !rating) {

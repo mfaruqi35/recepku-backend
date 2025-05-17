@@ -2,6 +2,7 @@ import usersModel from "../models/usersModel.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "../middleware/auth.js";
+import { response } from "express";
 
 // const generateUserToken = (userId) => {
 //   try {
@@ -28,7 +29,7 @@ import { verifyToken } from "../middleware/auth.js";
 export const registerUser = async (req, res) => {
   try {
     const { firstName, lastName, email, password, phoneNumber } = req.body;
-    if (!firstName || !lastName || !email || !password || !phoneNumber) {
+    if (!firstName || !lastName || !email || !password) {
       res.status(400).json({ message: "Please fill all required fields" });
     }
 
@@ -130,6 +131,37 @@ export const getProfile = [
         return res.status(404).json({ message: "Cannot find user" });
       }
       return res.status(200).json(userData);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+];
+
+export const editProfile = [
+  verifyToken,
+  async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const user = await usersModel.findById(userId);
+      const { firstName, lastName, email, phoneNumber } = req.body;
+      const file = req.files?.["profilePic"]?.[0];
+      if (!user) {
+        return res
+          .status(404)
+          .json({ message: "Cannot find user", status: 404, data: null });
+      }
+
+      if (firstName) user.firstName = firstName;
+      if (lastName) user.lastName = lastName;
+      if (email) user.email = email;
+      if (phoneNumber) user.phoneNumber = phoneNumber;
+
+      await user.save();
+      return res.status(200).json({
+        message: "Profile is successfully updated",
+        status: 200,
+        data: user,
+      });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
