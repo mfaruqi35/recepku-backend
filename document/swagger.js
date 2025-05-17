@@ -11,7 +11,7 @@ const options = {
     },
     servers: [
       {
-        url: "https://recepku-backend.vercel.app",
+        url: "http://localhost:3003/",
       },
     ],
   },
