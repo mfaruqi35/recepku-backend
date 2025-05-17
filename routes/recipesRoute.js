@@ -2,6 +2,8 @@ import express from "express";
 import { uploadImages } from "../middleware/multer.js";
 import {
   createRecipe,
+  deleteRecipe,
+  editRecipe,
   getAllRecipe,
   getMyRecipeDetail,
   getMyRecipes,
@@ -15,5 +17,7 @@ recipeRouter.get("/my-recipes", getMyRecipes);
 recipeRouter.get("/", getAllRecipe);
 recipeRouter.get("/:recipeId", getRecipeDetail);
 recipeRouter.get("/my-recipes/:recipeId", getMyRecipeDetail);
+recipeRouter.put("/my-recipes/:recipeId", editRecipe);
+recipeRouter.delete("/my-recipes/:recipeId", deleteRecipe);
 
 export default recipeRouter;

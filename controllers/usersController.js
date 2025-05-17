@@ -2,8 +2,7 @@ import usersModel from "../models/usersModel.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "../middleware/auth.js";
-import { uploadToCloudinary } from "../utils/cloudinary.js";
-import cloudinary from "../utils/cloudinary.js";
+import cloudinary, { uploadToCloudinary } from "../utils/cloudinary.js";
 
 export const registerUser = async (req, res) => {
   try {
