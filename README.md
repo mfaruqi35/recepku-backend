@@ -76,4 +76,17 @@ endpoint: **`users/save-recipe/:userId`** (Method: POST)
 
 **Response:**
 
-- **`200 OK`** dan status Recipe Saved atau Recipe Unsaved
+- **`200 OK`** dan status "Recipe Saved" atau "Recipe Unsaved".
+
+### Get Saved Recipes
+
+Ambil semua resep yang disimpan user
+endpoint: **`users/saved-recipes`** (Method: GET)
+
+**Header:**
+
+- Auth token diperlukan.
+
+**Response:**
+
+- **`200 OK`** dengan array resep yang disimpan.
