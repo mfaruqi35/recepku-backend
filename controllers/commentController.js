@@ -1,4 +1,5 @@
 import { verifyToken } from "../middleware/auth.js";
+import upload from "../middleware/multer.js";
 import commentsModel from "../models/commentsModel.js";
 import { uploadToCloudinary } from "../utils/cloudinary.js";
 
@@ -26,6 +27,15 @@ export const createComment = [
         });
       }
 
+      if (rating < 1 || rating > 5) {
+        return res
+          .status(400)
+          .json({ message: "Rating invalid", status: 400, data: null });
+      }
+
+      let imageUrl = null;
+      let imageAlias = null;
+
       if (file) {
         const alias = `comment-${commentText
           .toLowerCase()
@@ -35,6 +45,8 @@ export const createComment = [
           "comments",
           alias
         );
+        imageUrl = upload.secure_url;
+        imageAlias = uploadResult.public_id;
       }
 
       const comment = new commentsModel({
@@ -42,8 +54,8 @@ export const createComment = [
         recipeId: recipeId,
         commentText,
         rating,
-        image: uploadResult.secure_url,
-        imageAlias: uploadResult.public_id,
+        image: imageUrl,
+        imageAlias: imageAlias,
         createdAt: new Date(),
       });
 
@@ -64,15 +76,20 @@ export const getAllComment = async (req, res) => {
   try {
     const comments = await commentsModel
       .find()
-      .populate("User", "firstName lastName profilePic");
+      .populate("userId", "firstName lastName profilePic")
+      .populate("replies.userId", "userName profilePic");
 
     const commentData = comments.map((r) => ({
-      firstName: r.User?.firstName,
-      lastName: r.User?.lastName,
-      profilePic: r.User?.profilePic,
+      userName: r.userId?.userName,
+      profilePic: r.userId?.profilePic,
       commentText: r.commentText,
       rating: r.rating,
-      replies: r.replies,
+      replies: r.replies.map((reply) => ({
+        commentText: reply.commentText,
+        createdAt: reply.createdAt,
+        userName: reply.userId?.userName,
+        profilePic: reply.userId?.profilePicAlias,
+      })),
     }));
 
     return res.status(200).json({ comments: commentData });

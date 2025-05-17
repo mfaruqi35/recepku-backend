@@ -1,5 +1,7 @@
 import { verifyToken } from "../middleware/auth.js";
+import commentsModel from "../models/commentsModel.js";
 import recipesModel from "../models/recipesModel.js";
+import reviewsModel from "../models/reviewsModel.js";
 import cloudinary, { uploadToCloudinary } from "../utils/cloudinary.js";
 
 export const createRecipe = [
@@ -80,10 +82,27 @@ export const getAllRecipe = [
         .find()
         .select("title shortDescription thumbnailAlias");
 
+      const recipeWithRating = await Promise.all(
+        recipes.map(async (recipe) => {
+          const comments = await commentsModel.find({ recipeId: recipe._id });
+
+          const totalComments = comments.length;
+          const avgRating =
+            totalComments > 0
+              ? comments.reduce((sum, r) => sum + r.rating, 0) / totalComments
+              : 0;
+
+          return {
+            ...recipe.toObject(),
+            averageRating: Number(avgRating.toFixed(1)),
+            totalComments,
+          };
+        })
+      );
       return res.status(200).json({
         message: "All recipes retrieved successfully",
         status: 200,
-        data: recipes,
+        data: recipeWithRating,
       });
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -126,9 +145,22 @@ export const getRecipeDetail = [
           .json({ message: "Recipe not found", status: 404, recipe: null });
       }
 
-      return res
-        .status(200)
-        .json({ message: "Recipe found", status: 200, recipe: recipe });
+      const comments = await commentsModel.find({ recipeId: recipe._id });
+      const totalComments = comments.length;
+      const avgRating =
+        totalComments > 0
+          ? comments.reduce((sum, r) => sum + r.rating, 0) / totalComments
+          : 0;
+
+      return res.status(200).json({
+        message: "Recipe detail successfully retrieved",
+        status: 200,
+        data: {
+          ...recipe.toObject(),
+          averageRating: Number(avgRating.toFixed(1)),
+          totalComments,
+        },
+      });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }

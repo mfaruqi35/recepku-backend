@@ -5,7 +5,7 @@ const commentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Recipe",
   },
-  User: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -31,7 +31,7 @@ const commentSchema = new mongoose.Schema({
   },
   replies: [
     {
-      User: {
+      userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
