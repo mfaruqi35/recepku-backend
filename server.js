@@ -7,6 +7,7 @@ import userRouter from "./routes/usersRoute.js";
 import reviewRouter from "./routes/reviewsRoute.js";
 import commentRouter from "./routes/commentsRoute.js";
 import recipeRouter from "./routes/recipesRoute.js";
+import swaggerDocs from "./document/swagger.js";
 
 configDotenv();
 
@@ -22,9 +23,15 @@ app.use(express.json());
 app.use(cors({ origin: "*", optionsSuccessStatus: 200 }));
 app.use(bodyParser.json());
 
+const clientOptions = {
+  serverApi: { version: "1", strict: true, deprecationErrors: true },
+};
+
 app.use("/users", userRouter);
 app.use("/recipes", recipeRouter);
 app.use("/reviews", reviewRouter);
 app.use("/comments", commentRouter);
+
+swaggerDocs(app);
 
 app.listen(PORT, () => console.log(`Server started in port: ${PORT}`));
