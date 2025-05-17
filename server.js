@@ -20,7 +20,7 @@ db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to MongoDB"));
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: "*", optionsSuccessStatus: 200 }));
 app.use(bodyParser.json());
 
 app.use("/users", userRouter);
