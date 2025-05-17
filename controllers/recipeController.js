@@ -111,8 +111,58 @@ export const getMyRecipes = [
   },
 ];
 
-// export const getRecipeDetail
-// export const getMyRecipeDetail
+export const getRecipeDetail = [
+  verifyToken,
+  async (req, res) => {
+    try {
+      const recipeId = req.params.recipeId;
+      const recipe = await recipesModel.findById(recipeId);
+
+      if (!recipe) {
+        return res
+          .status(404)
+          .json({ message: "Recipe not found", status: 404, recipe: null });
+      }
+
+      return res
+        .status(200)
+        .json({ message: "Recipe found", status: 200, recipe: recipe });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  },
+];
+
+export const getMyRecipeDetail = [
+  verifyToken,
+  async (req, res) => {
+    try {
+      const recipeId = req.params.recipeId;
+      const userId = req.user.userId;
+
+      const myRecipe = await recipesModel.findOne({
+        _id: recipeId,
+        userId: userId,
+      });
+
+      if (!myRecipe) {
+        return res.status(404).json({
+          message: "Recipe not found or user unauthorized",
+          status: 404,
+          recipe: null,
+        });
+      }
+
+      return res.status(200).json({
+        message: "My recipe detail fetched successfully",
+        status: 200,
+        recipe: myRecipe,
+      });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  },
+];
 
 // export const editRecipe = [
 //   verifyToken,
