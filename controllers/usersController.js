@@ -82,10 +82,10 @@ export const loginUser = async (req, res, next) => {
               await user.save();
 
               return res.status(200).json({
+                message: "Login Succesfully",
                 status: 200,
                 data: user,
                 token: token,
-                message: "Login Succesfully",
               });
             }
           );

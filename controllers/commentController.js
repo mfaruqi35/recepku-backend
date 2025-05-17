@@ -14,6 +14,7 @@ export const createComment = [
         });
       }
       const userId = req.user.userId;
+      const recipeId = req.params.recipeid;
       const { commentText, rating } = req.body;
       const file = req.files?.["image"]?.[0];
 
@@ -36,6 +37,7 @@ export const createComment = [
 
       const comment = new commentsModel({
         userId: userId,
+        recipeId: recipeId,
         commentText,
         rating,
         image: uploadResult.secure_url,

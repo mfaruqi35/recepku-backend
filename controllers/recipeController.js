@@ -71,3 +71,108 @@ export const createRecipe = [
     }
   },
 ];
+
+export const getAllRecipe = [
+  verifyToken,
+  async (req, res) => {
+    try {
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  },
+];
+export const getMyRecipes = [
+  verifyToken,
+  async (req, res) => {
+    try {
+      const userId = req.user.userId;
+      const recipes = await recipesModel
+        .find({ userId })
+        .select("title shortDescription thumbnailAlias");
+
+      return res.status(200).json({
+        message: "My recipes retrieved successfully",
+        status: 200,
+        data: recipes,
+      });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  },
+];
+
+// export const getRecipeDetail
+// export const getMyRecipeDetail
+
+// export const editRecipe = [
+//   verifyToken,
+//   async (req, res) => {
+//     if (!req.user || !req.user.userId) {
+//       return res.status(401).json({
+//         message: "User authentication failed or invalid user data",
+//         status: 401,
+//         data: null,
+//       });
+//     }
+//     try {
+//       const userId = req.user.userId;
+//       const { recipeId } = req.params;
+//     } catch (error) {
+//       return res.status(500).json({ message: error.message });
+//     }
+//   },
+// ];
+
+//export const deleteRecipe
+
+export const toggleLikeRecipe = [
+  verifyToken,
+  async (req, res) => {
+    try {
+      const userId = req.user.userId;
+      const { recipeId } = req.params;
+
+      const recipe = await recipesModel.findById(recipeId);
+      if (!recipe) {
+        return res.status(404).json({ message: "Recipe not found" });
+      }
+
+      const alreadyLiked = recipe.likes.includes(userId);
+      if (alreadyLiked) {
+        //Unlike
+        recipe.likes.pull(userId);
+        recipe.likeCount -= 1;
+      } else {
+        //Like
+        recipe.likes.push(userId);
+        recipe.likeCount += 1;
+      }
+      await recipe.save();
+
+      res.status(200).json({
+        liked: !alreadyLiked,
+        likeCount: recipe.likeCount,
+      });
+    } catch (error) {
+      return res.status(500).json({ error: message });
+    }
+  },
+];
+
+export const incrementShareCount = async (req, res) => {
+  try {
+    const { recipeId } = req.params;
+    const recipe = await recipesModel.findById(recipeId);
+    if (!recipe) {
+      return res.status(404).json({ status: 404, message: "Recipe not found" });
+    }
+    recipe.shareCount += 1;
+    await recipe.save();
+
+    res.status(200).json({
+      shareCount: recipe.shareCount,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

@@ -7,7 +7,7 @@ import {
 
 const commentRouter = express.Router();
 
-commentRouter.post("/create-comment", createComment);
+commentRouter.post("/:recipeId/create-comment", createComment);
 commentRouter.get("/", getAllComment);
 commentRouter.post("/:commentId/reply", replyToComment);
 

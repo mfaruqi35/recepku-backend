@@ -8,6 +8,7 @@ const commentSchema = new mongoose.Schema({
   User: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
   rating: {
     type: Number,
