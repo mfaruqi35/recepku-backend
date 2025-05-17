@@ -17,7 +17,7 @@ recipeRouter.get("/my-recipes", getMyRecipes);
 recipeRouter.get("/", getAllRecipe);
 recipeRouter.get("/:recipeId", getRecipeDetail);
 recipeRouter.get("/my-recipes/:recipeId", getMyRecipeDetail);
-recipeRouter.put("/my-recipes/:recipeId", editRecipe);
+recipeRouter.put("/my-recipes/:recipeId", uploadImages, editRecipe);
 recipeRouter.delete("/my-recipes/:recipeId", deleteRecipe);
 
 export default recipeRouter;

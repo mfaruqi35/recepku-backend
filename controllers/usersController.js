@@ -1,6 +1,6 @@
 import usersModel from "../models/usersModel.js";
 import bcryptjs from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt, { verify } from "jsonwebtoken";
 import { verifyToken } from "../middleware/auth.js";
 import cloudinary, { uploadToCloudinary } from "../utils/cloudinary.js";
 
@@ -161,6 +161,62 @@ export const editProfile = [
       });
     } catch (error) {
       res.status(500).json({ message: error.message });
+    }
+  },
+];
+
+export const saveRecipe = [
+  verifyToken,
+  async (req, res) => {
+    try {
+      const userId = req.user.userId;
+      const { recipeId } = req.params;
+
+      const user = await usersModel.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const alreadySaved = user.savedRecipes.includes(recipeId);
+
+      if (alreadySaved) {
+        user.savedRecipes = user.savedRecipes.filter(
+          (id) => id.toString() !== recipeId
+        );
+      } else {
+        user.savedRecipes.push(recipeId);
+      }
+      await user.save();
+
+      return res.status(200).json({
+        message: alreadySaved ? "Recipe unsaved" : "Recipe saved",
+        data: user.savedRecipes,
+      });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  },
+];
+
+export const getSavedRecipes = [
+  verifyToken,
+  async (req, res) => {
+    try {
+      const userId = req.user.userId;
+
+      const user = await usersModel.findById(userId).populate("savedRecipes");
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      return res.status(200).json({
+        message: "Saved recipes fetched",
+        data: user.savedRecipes,
+      });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
     }
   },
 ];
