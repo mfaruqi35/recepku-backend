@@ -76,11 +76,21 @@ export const getAllRecipe = [
   verifyToken,
   async (req, res) => {
     try {
+      const recipes = await recipesModel
+        .find()
+        .select("title shortDescription thumbnailAlias");
+
+      return res.status(200).json({
+        message: "All recipes retrieved successfully",
+        status: 200,
+        data: recipes,
+      });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
   },
 ];
+
 export const getMyRecipes = [
   verifyToken,
   async (req, res) => {
