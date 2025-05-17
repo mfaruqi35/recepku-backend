@@ -5,16 +5,16 @@ import { uploadToCloudinary } from "../utils/cloudinary.js";
 export const createRecipe = [
   verifyToken,
   async (req, res) => {
-    const userId = req.user.id;
     try {
-      // if (!req.user || !req.user._id) {
-      //   return res.status(401).json({
-      //     message: "User authentication failed or invalid user data",
-      //     status: 401,
-      //     data: null,
-      //   });
-      // }
+      if (!req.user || !req.user.userId) {
+        return res.status(401).json({
+          message: "User authentication failed or invalid user data",
+          status: 401,
+          data: null,
+        });
+      }
 
+      const userId = req.user.userId;
       const {
         title,
         shortDescription,
@@ -46,7 +46,6 @@ export const createRecipe = [
       );
 
       const parsedIngredients = JSON.parse(ingredients);
-      console.log("userId dari token:", userId);
 
       const recipe = new recipesModel({
         title,

@@ -6,6 +6,13 @@ export const createComment = [
   verifyToken,
   async (req, res) => {
     try {
+      if (!req.user || !req.user.userId) {
+        return res.status(401).json({
+          message: "User authentication failed or invalid user data",
+          status: 401,
+          data: null,
+        });
+      }
       const userId = req.user._id;
       const { commentText, rating } = req.body;
       const file = req.files?.["image"]?.[0];
