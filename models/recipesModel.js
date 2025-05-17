@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const recipeSchema = new Schema({
+const recipeSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -8,6 +8,7 @@ const recipeSchema = new Schema({
 
   shortDescription: {
     type: String,
+    maxlength: 100,
   },
 
   ingredients: [
@@ -16,7 +17,7 @@ const recipeSchema = new Schema({
         type: String,
         required: true,
       },
-      description: {
+      name: {
         type: String,
         required: true,
       },
@@ -49,6 +50,10 @@ const recipeSchema = new Schema({
     required: true,
   },
 
+  thumbnailAlias: {
+    type: String,
+  },
+
   rating: {
     type: Number,
     min: 1,
@@ -56,7 +61,8 @@ const recipeSchema = new Schema({
   },
 
   userId: {
-    type: Schema.Type.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
 

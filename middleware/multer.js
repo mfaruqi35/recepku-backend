@@ -18,7 +18,8 @@ const upload = multer({
 
 export const uploadImages = upload.fields([
   { name: "thumbnail", maxCount: 1 },
-  { name: "commentImage", maxCount: 10 },
+  { name: "image", maxCount: 10 },
+  { name: "profilePicture", maxCount: 1 },
 ]);
 
 export default upload;

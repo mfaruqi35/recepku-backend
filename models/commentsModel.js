@@ -18,6 +18,12 @@ const commentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  image: {
+    type: String,
+  },
+  imageAlias: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

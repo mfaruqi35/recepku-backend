@@ -8,6 +8,7 @@ export const createComment = [
     try {
       const userId = req.user._id;
       const { commentText, rating } = req.body;
+      const file = req.files?.["image"]?.[0];
 
       if (!commentText || !rating) {
         return res.status(400).json({
@@ -17,10 +18,21 @@ export const createComment = [
         });
       }
 
+      const alias = `comment-${commentText
+        .toLowerCase()
+        .replace(/\s+/g, "-")}-${Date.now()}`;
+      const uploadResult = await uploadToCloudinary(
+        file.buffer,
+        "comments",
+        alias
+      );
+
       const comment = new commentsModel({
         userId: userId,
         commentText,
         rating,
+        image: uploadResult.secure_url,
+        imageAlias: uploadResult.public_id,
         createdAt: new Date(),
       });
 

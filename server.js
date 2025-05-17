@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import userRouter from "./routes/usersRoute.js";
 import reviewRouter from "./routes/reviewsRoute.js";
 import commentRouter from "./routes/commentsRoute.js";
+import recipeRouter from "./routes/recipesRoute.js";
 
 configDotenv();
 
@@ -22,6 +23,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use("/users", userRouter);
+app.use("/recipes", recipeRouter);
 app.use("/reviews", reviewRouter);
 app.use("/comments", commentRouter);
 
