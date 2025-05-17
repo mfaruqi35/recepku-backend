@@ -116,7 +116,9 @@ export const getRecipeDetail = [
   async (req, res) => {
     try {
       const recipeId = req.params.recipeId;
-      const recipe = await recipesModel.findById(recipeId);
+      const recipe = await recipesModel
+        .findById(recipeId)
+        .populate("userId", "userName profilePicAlias");
 
       if (!recipe) {
         return res

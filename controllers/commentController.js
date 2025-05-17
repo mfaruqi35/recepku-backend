@@ -14,7 +14,7 @@ export const createComment = [
         });
       }
       const userId = req.user.userId;
-      // const recipeId = req.params.recipeid;
+      const { recipeId } = req.params;
       const { commentText, rating } = req.body;
       const file = req.files?.["image"]?.[0];
 
@@ -26,14 +26,16 @@ export const createComment = [
         });
       }
 
-      const alias = `comment-${commentText
-        .toLowerCase()
-        .replace(/\s+/g, "-")}-${Date.now()}`;
-      const uploadResult = await uploadToCloudinary(
-        file.buffer,
-        "comments",
-        alias
-      );
+      if (file) {
+        const alias = `comment-${commentText
+          .toLowerCase()
+          .replace(/\s+/g, "-")}-${Date.now()}`;
+        const uploadResult = await uploadToCloudinary(
+          file.buffer,
+          "comments",
+          alias
+        );
+      }
 
       const comment = new commentsModel({
         userId: userId,

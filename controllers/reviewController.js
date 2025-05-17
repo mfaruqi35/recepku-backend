@@ -48,11 +48,10 @@ export const getAllReview = async (req, res) => {
   try {
     const reviews = await reviewsModel
       .find()
-      .populate("User", "firstName lastName profilePic");
+      .populate("User", "userName profilePic");
 
     const reviewData = reviews.map((r) => ({
-      firstName: r.User?.firstName,
-      lastName: r.User?.lastName,
+      userName: r.User?.userName,
       profilePic: r.User?.profilePic,
       content: r.content,
       rating: r.rating,

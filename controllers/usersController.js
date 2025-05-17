@@ -6,8 +6,8 @@ import cloudinary, { uploadToCloudinary } from "../utils/cloudinary.js";
 
 export const registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, phoneNumber } = req.body;
-    if (!firstName || !lastName || !email || !password) {
+    const { email, phoneNumber, userName, password } = req.body;
+    if (!email || !phoneNumber || !userName || !password) {
       res.status(400).json({ message: "Please fill all required fields" });
     }
 
@@ -22,11 +22,10 @@ export const registerUser = async (req, res) => {
       const salt = await bcryptjs.genSalt(10);
       const hashedPassword = await bcryptjs.hash(password, salt);
       const newUser = new usersModel({
-        firstName,
-        lastName,
         email,
-        password: hashedPassword,
         phoneNumber,
+        userName,
+        password: hashedPassword,
         profilePic: "default-profile.png",
       });
 
@@ -45,18 +44,21 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
+    const { login, password } = req.body;
+    if (!login || !password) {
       return res.status(400).json({
         status: 400,
         message: "Silakan isi semua kolom yang diperlukan.",
       });
     } else {
-      const user = await usersModel.findOne({ email });
+      const user = await usersModel.findOne({
+        $or: [{ email: login }, { userName: login }],
+      });
       if (!user) {
-        return res
-          .status(400)
-          .json({ status: 400, message: "Email atau kata sandi salah." });
+        return res.status(400).json({
+          status: 400,
+          message: "Email/username atau kata sandi salah.",
+        });
       } else {
         const validateUser = await bcryptjs.compare(password, user.password);
         if (!validateUser) {
@@ -122,7 +124,7 @@ export const editProfile = [
     try {
       const userId = req.params.userId;
       const user = await usersModel.findById(userId);
-      const { firstName, lastName, email, phoneNumber } = req.body;
+      const { userName, firstName, lastName, email, phoneNumber } = req.body;
       const file = req.files?.["profilePic"]?.[0];
       if (!user) {
         return res
@@ -130,6 +132,7 @@ export const editProfile = [
           .json({ message: "Cannot find user", status: 404, data: null });
       }
 
+      if (userName) user.userName = userName;
       if (firstName) user.firstName = firstName;
       if (lastName) user.lastName = lastName;
       if (email) user.email = email;
