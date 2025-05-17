@@ -1,6 +1,6 @@
 import usersModel from "../models/usersModel.js";
 import bcryptjs from "bcryptjs";
-import jwt, { verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { verifyToken } from "../middleware/auth.js";
 import cloudinary, { uploadToCloudinary } from "../utils/cloudinary.js";
 
