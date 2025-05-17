@@ -22,7 +22,7 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 const swaggerDocs = (app) => {
-  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Gunakan "/docs"
+  app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Gunakan "/docs"
 };
 
 export default swaggerDocs;
