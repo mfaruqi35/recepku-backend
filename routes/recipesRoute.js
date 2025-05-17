@@ -619,7 +619,7 @@ recipeRouter.delete("/my-recipes/:recipeId", deleteRecipe);
 /**
  * @swagger
  * /recipes/{recipeId}/like:
- *   post:
+ *   patch:
  *     summary: Toggle like/unlike a recipe by the authenticated user
  *     tags: [Recipes]
  *     security:
@@ -687,7 +687,7 @@ recipeRouter.patch("/:recipeId/like", toggleLikeRecipe);
 /**
  * @swagger
  * /recipes/{recipeId}/share:
- *   post:
+ *   patch:
  *     summary: Increment the share count of a recipe
  *     tags: [Recipes]
  *     parameters:
