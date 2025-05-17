@@ -1,7 +1,6 @@
 import { verifyToken } from "../middleware/auth.js";
 import commentsModel from "../models/commentsModel.js";
 import recipesModel from "../models/recipesModel.js";
-import reviewsModel from "../models/reviewsModel.js";
 import cloudinary, { uploadToCloudinary } from "../utils/cloudinary.js";
 
 export const createRecipe = [
@@ -78,6 +77,13 @@ export const getAllRecipe = [
   verifyToken,
   async (req, res) => {
     try {
+      if (!req.user || !req.user.userId) {
+        return res.status(401).json({
+          message: "User authentication failed or invalid user data",
+          status: 401,
+          data: null,
+        });
+      }
       const recipes = await recipesModel
         .find()
         .select("title shortDescription thumbnailAlias");
@@ -114,6 +120,13 @@ export const getMyRecipes = [
   verifyToken,
   async (req, res) => {
     try {
+      if (!req.user || !req.user.userId) {
+        return res.status(401).json({
+          message: "User authentication failed or invalid user data",
+          status: 401,
+          data: null,
+        });
+      }
       const userId = req.user.userId;
       const recipes = await recipesModel
         .find({ userId })
@@ -134,6 +147,13 @@ export const getRecipeDetail = [
   verifyToken,
   async (req, res) => {
     try {
+      if (!req.user || !req.user.userId) {
+        return res.status(401).json({
+          message: "User authentication failed or invalid user data",
+          status: 401,
+          data: null,
+        });
+      }
       const recipeId = req.params.recipeId;
       const recipe = await recipesModel
         .findById(recipeId)
@@ -171,6 +191,13 @@ export const getMyRecipeDetail = [
   verifyToken,
   async (req, res) => {
     try {
+      if (!req.user || !req.user.userId) {
+        return res.status(401).json({
+          message: "User authentication failed or invalid user data",
+          status: 401,
+          data: null,
+        });
+      }
       const recipeId = req.params.recipeId;
       const userId = req.user.userId;
 
@@ -274,6 +301,13 @@ export const deleteRecipe = [
   verifyToken,
   async (req, res) => {
     try {
+      if (!req.user || !req.user.userId) {
+        return res.status(401).json({
+          message: "User authentication failed or invalid user data",
+          status: 401,
+          data: null,
+        });
+      }
       const userId = req.user.userId;
       const recipeId = req.params.recipeId;
       if (!recipeId) {
@@ -309,6 +343,13 @@ export const toggleLikeRecipe = [
   verifyToken,
   async (req, res) => {
     try {
+      if (!req.user || !req.user.userId) {
+        return res.status(401).json({
+          message: "User authentication failed or invalid user data",
+          status: 401,
+          data: null,
+        });
+      }
       const userId = req.user.userId;
       const { recipeId } = req.params;
 

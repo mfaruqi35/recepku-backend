@@ -8,6 +8,8 @@ import {
   getMyRecipeDetail,
   getMyRecipes,
   getRecipeDetail,
+  incrementShareCount,
+  toggleLikeRecipe,
 } from "../controllers/recipeController.js";
 
 const recipeRouter = express.Router();
@@ -18,6 +20,8 @@ recipeRouter.get("/", getAllRecipe);
 recipeRouter.get("/:recipeId", getRecipeDetail);
 recipeRouter.get("/my-recipes/:recipeId", getMyRecipeDetail);
 recipeRouter.put("/my-recipes/:recipeId", uploadImages, editRecipe);
+recipeRouter.patch("/:recipeId/like", toggleLikeRecipe);
+recipeRouter.patch("/:recipeId/share", incrementShareCount);
 recipeRouter.delete("/my-recipes/:recipeId", deleteRecipe);
 
 export default recipeRouter;
