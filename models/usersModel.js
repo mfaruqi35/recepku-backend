@@ -21,9 +21,14 @@ const userSchema = new mongoose.Schema({
 
   phoneNumber: {
     type: String,
+    default: null,
   },
 
   profilePic: {
+    type: String,
+  },
+
+  profilePicAlias: {
     type: String,
   },
 

@@ -2,29 +2,8 @@ import usersModel from "../models/usersModel.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "../middleware/auth.js";
-import { response } from "express";
-
-// const generateUserToken = (userId) => {
-//   try {
-//     if (!process.env.JWT_SECRET) {
-//       console.error("JWT_SECRET is not defined in environment variables");
-//       return null;
-//     }
-
-//     if (!userId) {
-//       throw new Error("userId is missing");
-//     }
-
-//     const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-//       expiresIn: "1h",
-//     });
-
-//     return token;
-//   } catch (error) {
-//     console.error("Error generating token:", error);
-//     return null;
-//   }
-// };
+import { uploadToCloudinary } from "../utils/cloudinary.js";
+import cloudinary from "../utils/cloudinary.js";
 
 export const registerUser = async (req, res) => {
   try {
@@ -49,6 +28,7 @@ export const registerUser = async (req, res) => {
         email,
         password: hashedPassword,
         phoneNumber,
+        profilePic: "default-profile.png",
       });
 
       await newUser.save();
@@ -155,6 +135,24 @@ export const editProfile = [
       if (lastName) user.lastName = lastName;
       if (email) user.email = email;
       if (phoneNumber) user.phoneNumber = phoneNumber;
+
+      if (file) {
+        if (user.profilePicAlias) {
+          await cloudinary.uploader.destroy(`profiles/${user.profilePicAlias}`);
+        }
+
+        const alias = `profile-${(firstName || user.firstName || "user")
+          .toLowerCase()
+          .replace(/\s+/g, "-")}-${Date.now()}`;
+
+        const uploadResult = await uploadToCloudinary(
+          file.buffer,
+          "profiles",
+          alias
+        );
+        user.profilePic = uploadResult.secure_url;
+        user.profilePicAlias = uploadResult.public_id;
+      }
 
       await user.save();
       return res.status(200).json({
