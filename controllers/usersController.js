@@ -11,10 +11,12 @@ export const registerUser = async (req, res) => {
       res.status(400).json({ message: "Please fill all required fields" });
     }
 
-    const isAlreadyRegister = await usersModel.findOne({ email });
+    const isAlreadyRegister = await usersModel.findOne({
+      $or: [{ email }, { userName }],
+    });
     if (isAlreadyRegister) {
       res.status(400).json({
-        message: "User with this email is already registered",
+        message: "UserName or email is taken",
         status: 400,
         data: null,
       });

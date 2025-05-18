@@ -12,7 +12,7 @@ export const createReview = [
           data: null,
         });
       }
-      const userId = req.user.userId;
+      const userId = req.user?.userId;
       const { content, rating } = req.body;
 
       if (!content || !rating) {
@@ -48,11 +48,11 @@ export const getAllReview = async (req, res) => {
   try {
     const reviews = await reviewsModel
       .find()
-      .populate("User", "userName profilePic");
+      .populate("userId", "userName profilePic");
 
     const reviewData = reviews.map((r) => ({
-      userName: r.User?.userName,
-      profilePic: r.User?.profilePic,
+      userName: r.userId?.userName,
+      profilePic: r.userId?.profilePic,
       content: r.content,
       rating: r.rating,
     }));

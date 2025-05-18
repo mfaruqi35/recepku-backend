@@ -31,28 +31,25 @@ const userRouter = express.Router();
  *           schema:
  *             type: object
  *             required:
- *               - firstName
- *               - lastName
+ *               - userName
  *               - email
+ *               - phoneNumber
  *               - password
  *             properties:
- *               firstName:
- *                 type: string
- *                 example: John
- *               lastName:
- *                 type: string
- *                 example: Doe
  *               email:
  *                 type: string
  *                 format: email
  *                 example: johndoe@example.com
+ *               phoneNumber:
+ *                 type: string
+ *                 example: "081234567890"
+ *               userName:
+ *                 type: string
+ *                 example: John Doe
  *               password:
  *                 type: string
  *                 format: password
  *                 example: securePassword123
- *               phoneNumber:
- *                 type: string
- *                 example: "081234567890"
  *     responses:
  *       201:
  *         description: User registered successfully
@@ -73,18 +70,15 @@ const userRouter = express.Router();
  *                     _id:
  *                       type: string
  *                       example: 6650e01125a3b7c668c8d849
- *                     firstName:
- *                       type: string
- *                       example: John
- *                     lastName:
- *                       type: string
- *                       example: Doe
  *                     email:
  *                       type: string
  *                       example: johndoe@example.com
  *                     phoneNumber:
  *                       type: string
  *                       example: "081234567890"
+ *                     userName:
+ *                       type: string
+ *                       example: John Doe
  *                     profilePic:
  *                       type: string
  *                       example: default-profile.png

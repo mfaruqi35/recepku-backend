@@ -73,6 +73,22 @@ export const createRecipe = [
   },
 ];
 
+export const getLandingRecipe = async (req, res) => {
+  try {
+    const recipes = await recipesModel
+      .find()
+      .select("title shortDescription thumbnail");
+
+    return res.status(200).json({
+      message: "Landing page recipes fetched successfully",
+      status: 200,
+      data: recipes,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export const getAllRecipe = [
   verifyToken,
   async (req, res) => {
@@ -86,7 +102,7 @@ export const getAllRecipe = [
       }
       const recipes = await recipesModel
         .find()
-        .select("title shortDescription thumbnailAlias");
+        .select("title shortDescription thumbnail");
 
       const recipeWithRating = await Promise.all(
         recipes.map(async (recipe) => {
@@ -127,10 +143,10 @@ export const getMyRecipes = [
           data: null,
         });
       }
-      const userId = req.user.userId;
+      const { userId } = req.params;
       const recipes = await recipesModel
         .find({ userId })
-        .select("title shortDescription thumbnailAlias");
+        .select("title shortDescription thumbnail");
 
       return res.status(200).json({
         message: "My recipes retrieved successfully",
@@ -157,7 +173,7 @@ export const getRecipeDetail = [
       const recipeId = req.params.recipeId;
       const recipe = await recipesModel
         .findById(recipeId)
-        .populate("userId", "userName profilePicAlias");
+        .populate("userId", "userName profilePic");
 
       if (!recipe) {
         return res
@@ -267,8 +283,8 @@ export const editRecipe = [
       if (category) recipe.category = category;
 
       if (file) {
-        if (recipe.thumbnailAlias) {
-          await cloudinary.uploader.destroy(`recipes/${recipe.thumbnailAlias}`);
+        if (recipe.thumbnail) {
+          await cloudinary.uploader.destroy(`recipes/${recipe.thumbnail}`);
         }
 
         const alias = `recipe-${title
@@ -321,10 +337,8 @@ export const deleteRecipe = [
         userId: userId,
       });
 
-      if (deleteRecipe.thumbnailAlias) {
-        await cloudinary.uploader.destroy(
-          `recipes/${deleteRecipe.thumbnailAlias}`
-        );
+      if (deleteRecipe.thumbnail) {
+        await cloudinary.uploader.destroy(`recipes/${deleteRecipe.thumbnail}`);
       }
 
       await recipesModel.deleteOne({ _id: recipeId });

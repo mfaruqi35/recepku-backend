@@ -74,12 +74,14 @@ export const createComment = [
 
 export const getAllComment = async (req, res) => {
   try {
+    const { recipeId } = req.params;
     const comments = await commentsModel
-      .find()
-      .populate("userId", "firstName lastName profilePic")
+      .find({ recipeId })
+      .populate("userId", "userName profilePic")
       .populate("replies.userId", "userName profilePic");
 
     const commentData = comments.map((r) => ({
+      commentId: r._id,
       userName: r.userId?.userName,
       profilePic: r.userId?.profilePic,
       commentText: r.commentText,
@@ -88,7 +90,7 @@ export const getAllComment = async (req, res) => {
         commentText: reply.commentText,
         createdAt: reply.createdAt,
         userName: reply.userId?.userName,
-        profilePic: reply.userId?.profilePicAlias,
+        profilePic: reply.userId?.profilePic,
       })),
     }));
 

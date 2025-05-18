@@ -5,6 +5,7 @@ import {
   deleteRecipe,
   editRecipe,
   getAllRecipe,
+  getLandingRecipe,
   getMyRecipeDetail,
   getMyRecipes,
   getRecipeDetail,
@@ -20,6 +21,8 @@ const recipeRouter = express.Router();
  *   name: Recipes
  *   description: Endpoints related to recipes in website
  */
+
+recipeRouter.get("public/landing", getLandingRecipe);
 
 /**
  * @swagger
@@ -168,7 +171,7 @@ recipeRouter.get("/", getAllRecipe);
 
 /**
  * @swagger
- * /recipes/my-recipes:
+ * /recipes/my-recipes/{userId}:
  *   get:
  *     summary: Get recipes created by the authenticated user
  *     tags: [Recipes]
@@ -218,7 +221,7 @@ recipeRouter.get("/", getAllRecipe);
  *       500:
  *         description: Internal server error
  */
-recipeRouter.get("/my-recipes", getMyRecipes);
+recipeRouter.get("/my-recipes/:userId", getMyRecipes);
 
 /**
  * @swagger
