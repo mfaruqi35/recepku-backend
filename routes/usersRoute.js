@@ -423,7 +423,7 @@ userRouter.put("/profile/:userId", uploadImages, editProfile);
  *                   type: string
  *                   example: Internal server error
  */
-userRouter.put("/save-recipe/:recipeId", saveRecipe);
+userRouter.post("/save-recipe/:recipeId", saveRecipe);
 
 /**
  * @swagger
