@@ -486,6 +486,6 @@ userRouter.post("/save-recipe/:recipeId", saveRecipe);
  *                   type: string
  *                   example: Internal server error
  */
-userRouter.get("/saved-recipes", getSavedRecipes);
+userRouter.get("/saved-recipes/:userId", getSavedRecipes);
 
 export default userRouter;
