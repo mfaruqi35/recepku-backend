@@ -22,7 +22,7 @@ const recipeRouter = express.Router();
  *   description: Endpoints related to recipes in website
  */
 
-recipeRouter.get("public/landing", getLandingRecipe);
+recipeRouter.get("/public/landing", getLandingRecipe);
 
 /**
  * @swagger
