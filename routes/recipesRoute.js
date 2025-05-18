@@ -22,7 +22,7 @@ recipeRouter.get("/my-recipes/:userId", getMyRecipes);
 recipeRouter.get("/:recipeId", getRecipeDetail);
 recipeRouter.get("/my-recipes/:recipeId", getMyRecipeDetail);
 recipeRouter.put("/my-recipes/:recipeId", uploadImages, editRecipe);
-recipeRouter.delete("/my-recipes/:recipeId", deleteRecipe);
+recipeRouter.delete("/my-recipes/:userId/:recipeId", deleteRecipe);
 recipeRouter.patch("/:recipeId/like", toggleLikeRecipe);
 recipeRouter.patch("/:recipeId/share", incrementShareCount);
 

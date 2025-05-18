@@ -324,8 +324,8 @@ export const deleteRecipe = [
           data: null,
         });
       }
-      const userId = req.user.userId;
-      const recipeId = req.params.recipeId;
+      const { userId } = req.params;
+      const { recipeId } = req.params;
       if (!recipeId) {
         return res
           .status(400)
