@@ -208,7 +208,7 @@ export const getSavedRecipes = [
   verifyToken,
   async (req, res) => {
     try {
-      const userId = req.user.userId;
+      const { userId } = req.params;
 
       const user = await usersModel.findById(userId).populate("savedRecipes");
 
